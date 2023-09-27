@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    volumes:
+      - .:/go/src/github.com/alizoubair/snippetbox
+    container_name: snippetbox
+    restart: always
+    ports:
+      - "4000:4000"
+    tty: true
+    depends_on:
+      - mysql
+    networks:
+      - fullstack
+  mysql:
+    image: mysql
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+    ports:
+      - "3306:3306"
+    networks:
+      - fullstack
+networks:
+  fullstack:
+    driver: bridge
