@@ -38,9 +38,9 @@ func (m *SnippetModel) Get(id int) (*Snippet, error) {
 	query := `SELECT id, title, content, created, expires FROM snippets
 	WHERE expires > UTC_TIMESTAMP() AND id = ?`
 	row := m.DB.QueryRow(query, id)
-	
+
 	s := &Snippet{}
-	
+
 	err := row.Scan(&s.ID, &s.Title, &s.Content, &s.Created, &s.Expires)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -67,7 +67,7 @@ func (m *SnippetModel) Latest() ([]*Snippet, error) {
 	for rows.Next() {
 		s := &Snippet{}
 
-		err := rows.Scan(&s.ID, &s.Title,  &s.Content, &s.Created, &s.Expires)
+		err := rows.Scan(&s.ID, &s.Title, &s.Content, &s.Created, &s.Expires)
 		if err != nil {
 			return nil, err
 		}
@@ -77,6 +77,5 @@ func (m *SnippetModel) Latest() ([]*Snippet, error) {
 		}
 	}
 
-	
 	return snippets, nil
 }

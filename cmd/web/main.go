@@ -13,9 +13,9 @@ import (
 )
 
 type application struct {
-	errorLog *log.Logger
-	infoLog *log.Logger
-	snippets *models.SnippetModel
+	errorLog      *log.Logger
+	infoLog       *log.Logger
+	snippets      *models.SnippetModel
 	templateCache map[string]*template.Template
 }
 
@@ -40,16 +40,16 @@ func main() {
 	}
 
 	app := &application{
-		errorLog: errorLog,
-		infoLog: infoLog,
-		snippets: &models.SnippetModel{DB: db},
+		errorLog:      errorLog,
+		infoLog:       infoLog,
+		snippets:      &models.SnippetModel{DB: db},
 		templateCache: templateCache,
 	}
 
 	srv := &http.Server{
-		Addr: *addr,
+		Addr:     *addr,
 		ErrorLog: errorLog,
-		Handler: app.routes(),
+		Handler:  app.routes(),
 	}
 
 	infoLog.Printf("Starting server on %s", *addr)
