@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
@@ -70,4 +71,29 @@ func noSurf(next http.Handler) http.Handler {
 	})
 
 	return csrfHandler
+}
+
+// authenticate middleware method uses the request context for authentication
+// to check the database for the ID using the UserModel.Exists method.
+func (app *application) authenticate(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		id := app.sessionManager.GetInt(r.Context(), "authenticationID")
+		if id == 0 {
+			next.ServeHTTP(w, r)
+			return
+		}
+
+		exists, err := app.users.Exists(id)
+		if err != nil {
+			app.serverError(w, err)
+			return
+		}
+
+		if exists {
+			ctx := context.WithValue(r.Context(), isAuthenticatedContextKey, true)
+			r = r.WithContext(ctx)
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }
