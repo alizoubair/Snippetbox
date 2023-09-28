@@ -4,6 +4,8 @@ go 1.21.1
 
 require github.com/go-sql-driver/mysql v1.7.1
 
+require github.com/justinas/nosurf v1.1.1 // indirect
+
 require (
 	github.com/alexedwards/scs/mysqlstore v0.0.0-20230902070821-95fa2ac9d520 // indirect
 	github.com/alexedwards/scs/v2 v2.5.1 // indirect
