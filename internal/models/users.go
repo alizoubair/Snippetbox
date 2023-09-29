@@ -9,6 +9,12 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+type UserModelInterface interface {
+	Insert(name, email, password string) error
+	Authenticate(email, password string) (int, error)
+	Exists(id int) (bool, error)
+}
+
 type User struct {
 	ID             int
 	Name           string
@@ -20,6 +26,8 @@ type User struct {
 type UserModel struct {
 	DB *sql.DB
 }
+
+var _ UserModelInterface = (*UserModel)(nil)
 
 func (m *UserModel) Insert(name, email, password string) error {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 12)
@@ -68,7 +76,6 @@ func (m *UserModel) Authenticate(email, password string) (int, error) {
 
 	return id, nil
 }
-
 
 func (m *UserModel) Exists(id int) (bool, error) {
 	var exists bool
